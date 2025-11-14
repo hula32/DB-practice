@@ -20,8 +20,8 @@ def detail(request, pk):
     comments = article.comment_set.all()
     context = {
         'article': article,
-        'comment_form' : comment_form,
-        'comments' : comments,
+        'comment_form': comment_form,
+        'comments': comments,
     }
     return render(request, 'articles/detail.html', context)
 
@@ -69,6 +69,7 @@ def update(request, pk):
     }
     return render(request, 'articles/update.html', context)
 
+
 # 댓글 작성 함수
 def comments_create(request, pk):
     # 게시글 조회
@@ -77,23 +78,24 @@ def comments_create(request, pk):
     comment_form = CommentForm(request.POST)
     # 유효성 검사
     if comment_form.is_valid():
-        # commit False는 DB에 저장 요청을 잠시 보류하고, 
+        # commit False는 DB에 저장 요청을 잠시 보류하고,
         # 대신 comment 인스턴스는 반환 해줌
         comment = comment_form.save(commit=False)
         # 외래 키 데이터를 할당
-        comment.articles = article
+        comment.article = article
         comment.save()
-        return redirect('article:detail', article.pk)
+        return redirect('articles:detail', article.pk)
     context = {
-        'article' : article,
-        'comment_form' : comment_form,
+        'article': article,
+        'comment_form': comment_form,
     }
     return render(request, 'articles/detail.html', context)
+
 
 # 댓글 삭제 함수
 def comments_delete(request, article_pk, comment_pk):
     # 삭제할 댓글 조회
-    comment = Comment.objects.get(pk = comment_pk)
+    comment = Comment.objects.get(pk=comment_pk)
     # 댓글 삭제
     comment.delete()
     # 삭제 후 게시글 상세 페이지로 리다이렉트

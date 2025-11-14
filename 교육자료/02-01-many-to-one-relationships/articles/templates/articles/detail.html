@@ -13,10 +13,10 @@
   <p>내용: {{ article.content }}</p>
   <p>작성일: {{ article.created_at }}</p>
   <p>수정일: {{ article.updated_at }}</p>
-  <hr>
 
+  <hr>
   {% comment %} 댓글 목록 {% endcomment %}
-  <ul> 
+  <ul>
   {% for comment in comments %}
     <li>
       {{ comment.content }}
@@ -25,8 +25,9 @@
         <input type="submit" value="삭제">
       </form>
     </li>
-    {% endfor %}
+  {% endfor %}
   </ul>
+
   <hr>
   {% comment %} 댓글 작성 Form {% endcomment %}
   <form action="{% url "articles:comments_create" article.pk %}" method="POST">
@@ -34,7 +35,9 @@
     {{ comment_form }}
     <input type="submit">
   </form>
+
   <hr>
+
   <a href="{% url "articles:update" article.pk %}">수정하기</a><br>
   <form action="{% url "articles:delete" article.pk %}" method="POST">
     {% csrf_token %}

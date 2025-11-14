@@ -26,14 +26,14 @@ def detail(request, pk):
     return render(request, 'articles/detail.html', context)
 
 
+
 @login_required
-@require_http()
 def create(request):
     if request.method == 'POST':
         form = ArticleForm(request.POST)
         if form.is_valid():
             article = form.save(commit=False)
-            article.user = request.user 
+            article.user = request.user
             article.save()
             return redirect('articles:detail', article.pk)
     else:
@@ -49,14 +49,14 @@ def delete(request, pk):
     article = Article.objects.get(pk=pk)
     if request.user == article.user:
         article.delete()
-
     return redirect('articles:index')
 
 
 @login_required
 def update(request, pk):
     article = Article.objects.get(pk=pk)
-    if request.user == article.user : 
+    # 현재 수정을 요청하는 유저와 게시글의 작성자가 같은지 확인
+    if request.user == article.user:
         if request.method == 'POST':
             form = ArticleForm(request.POST, instance=article)
             if form.is_valid():
@@ -65,7 +65,7 @@ def update(request, pk):
 
         else:
             form = ArticleForm(instance=article)
-    else :
+    else:
         return redirect('articles:index')
     context = {
         'article': article,
@@ -85,9 +85,9 @@ def comments_create(request, pk):
         # commit False는 DB에 저장 요청을 잠시 보류하고,
         # 대신 comment 인스턴스는 반환 해줌
         comment = comment_form.save(commit=False)
-        # 외래 키 데이터를 할당
+        # 외래 키 데이터(어떤 게시글에 작성되는지)를 할당
         comment.article = article
-        # 외래 키 누가 작성하는지
+        # 외래 키 데이터(누가 작성하는지)를 할당
         comment.user = request.user
         comment.save()
         return redirect('articles:detail', article.pk)
@@ -102,6 +102,7 @@ def comments_create(request, pk):
 def comments_delete(request, article_pk, comment_pk):
     # 삭제할 댓글 조회
     comment = Comment.objects.get(pk=comment_pk)
+    # 댓글 삭제를 요청하는 유저가 현재 삭제되는 댓글의 작성자가 맞는지 확인
     if request.user == comment.user:
         # 댓글 삭제
         comment.delete()

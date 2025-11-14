@@ -3,60 +3,71 @@ SELECT * FROM articles;
 DROP TABLE articles;
 PRAGMA table_info('articles');
 
-CREATE TABLE articles(
+CREATE TABLE articles (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title VARCHAR(100) NOT NULL,
   content VARCHAR(200) NOT NULL,
-  createAt DATE NOT NULL
+  createdAt DATE NOT NULL
 );
+
+
 -- 1. Insert data into table
 INSERT INTO 
-  articles(title, content, createAt)
+  articles (title, content, createdAt)
 VALUES 
   ('hello', 'world', '2000-01-01');
 
+
 INSERT INTO 
-  articles(title, content, createAt)
+  articles (title, content, createdAt)
 VALUES 
   ('title1', 'content1', '1900-01-01'),
   ('title2', 'content2', '1800-01-01'),
   ('title3', 'content3', '1700-01-01');
 
+
 INSERT INTO 
-  articles(title, content, createAt)
-VALUES
+  articles (title, content, createdAt)
+VALUES 
   ('mytitle', 'mycontent', DATE());
 
+
 -- 2. Update data in table
-UPDATE
+UPDATE 
   articles
-SET
+SET 
   title = 'update Title'
 WHERE
   id = 1;
 
-UPDATE
+UPDATE 
   articles
-SET
+SET 
   title = 'update Title',
   content = 'update Content'
 WHERE
   id = 2;
 
-
 -- 3. Delete data from table
 DELETE FROM 
   articles
-WHERE
+WHERE 
   id = 1;
 
+
+
 -- 심화
+-- DELETE FROM
+--   articles
+-- ORDER BY createdAt
+-- LIMIT 2;
+
 DELETE FROM
   articles
-WHERE
-  id IN (
-    SELECT id 
-    FROM articles
-    ORDER BY createAt
-    LIMIT 2
-  );
+-- WHERE id = "작성일이 오래된 순 상위 2개의 id"
+WHERE id IN (
+  SELECT id
+  FROM articles
+  ORDER BY createdAt
+  LIMIT 2
+);

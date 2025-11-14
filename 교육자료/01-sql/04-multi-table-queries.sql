@@ -39,20 +39,19 @@ VALUES
 
 
 -- INNER JOIN
-SELECT *
-FROM articles
+SELECT * FROM articles
 INNER JOIN users
-  ON users.id = articles.userId;
+  ON articles.userId = users.id;
 
-SELECT articles.title, users.name
+SELECT articles.title, users.name 
 FROM articles
 INNER JOIN users
-  ON users.id = articles.userId;
+  ON articles.userId = users.id;
 
-SELECT articles.title, users.name
+SELECT articles.title, users.name 
 FROM articles
 INNER JOIN users
-  ON users.id = articles.userId
+  ON articles.userId = users.id
 WHERE
   users.id = 1;
 
@@ -60,14 +59,23 @@ WHERE
 -- LEFT JOIN
 SELECT * FROM articles
 LEFT JOIN users
-  ON users.id = articles.userId;
+  ON articles.userId = users.id;
 
-SELECT * FROM articles
-LEFT JOIN users
-  ON users.id = articles.userId;
 
+-- "게시글이 없는 사용자 조회하기"
+-- 1단계. 모든 사용자와 게시글 조회
+SELECT * FROM users
+LEFT JOIN articles
+  ON articles.userId = users.id;
+
+-- 2단계. 게시글이 없는 사용자 조회
+SELECT * FROM users
+LEFT JOIN articles
+  ON articles.userId = users.id
+WHERE articles.userId IS NULL;
+
+-- 3단계. 게시글이 없는 사용자 이름만 조회
 SELECT users.name FROM users
 LEFT JOIN articles
   ON articles.userId = users.id
-WHERE
-  articles.userId IS NULL;
+WHERE articles.userId IS NULL;
